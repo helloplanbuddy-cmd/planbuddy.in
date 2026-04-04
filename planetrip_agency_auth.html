@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PLANETRIP — Agency Portal Sign In</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='28'>🏢</text></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&display=swap" rel="stylesheet"/>
+<style>
+/* ── CSS VARIABLES ── */
+:root {
+  --ink: #0d0d0d;
+  --paper: #f5f0e8;
+  --cream: #faf7f2;
+  --teal: #0a7c6e;
+  --teal-light: #e0f4f1;
+  --teal-mid: #4db8aa;
+  --amber: #d4770a;
+  --amber-light: #fef3e2;
+  --red: #c0392b;
+  --red-light: #fdecea;
+  --green: #1a7a4a;
+  --green-light: #e6f4ed;
+  --muted: #6b6660;
+  --border: #ddd8cf;
+  --white: #ffffff;
+  --agency-dark: #0f1923;
+  --agency-mid: #162032;
+  --agency-accent: #f59e0b;
+  --agency-accent-light: #fef3c7;
+  --shadow-sm: 0 2px 8px rgba(13,13,13,0.06);
+  --shadow-md: 0 8px 32px rgba(13,13,13,0.10);
+  --shadow-lg: 0 24px 64px rgba(13,13,13,0.14);
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 28px;
+  --radius-xl: 40px;
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --transition: 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--teal-mid); border-radius: 3px; }
+::selection { background: var(--agency-accent-light); color: var(--agency-dark); }
+
+/* ── AGENCY AUTH PAGE LAYOUT ── */
+.agency-auth-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 500px;
+}
+
+/* ── LEFT HERO — AGENCY BRAND ── */
+.agency-hero {
+  background: linear-gradient(145deg, var(--agency-dark) 0%, var(--agency-mid) 60%, #1e3a5f 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 48px 56px;
+  position: relative;
+  overflow: hidden;
+}
+.agency-hero::before {
+  content: '';
+  position: absolute;
+  width: 800px; height: 800px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245,158,11,0.08) 0%, transparent 65%);
+  top: -250px; right: -250px;
+  pointer-events: none;
+}
+.agency-hero::after {
+  content: '';
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(10,124,110,0.10) 0%, transparent 65%);
+  bottom: -100px; left: -80px;
+  pointer-events: none;
+}
+.agency-grid-lines {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+.agency-hero-logo {
+  display: flex; align-items: center; gap: 14px;
+  position: relative; z-index: 1;
+}
+.agency-logo-mark {
+  width: 44px; height: 44px;
+  background: var(--agency-accent);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+}
+.agency-logo-texts { line-height: 1.2; }
+.agency-logo-name {
+  font-family: var(--font-display);
+  font-size: 1.5rem; color: white;
+  letter-spacing: -0.02em;
+}
+.agency-logo-sub {
+  font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--agency-accent); display: block;
+}
+.agency-hero-body {
+  position: relative; z-index: 1;
+  padding: 40px 0;
+}
+.agency-hero-eyebrow {
+  font-size: 0.72rem; font-weight: 800;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--agency-accent); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.agency-hero-eyebrow::after {
+  content: ''; flex: 1; max-width: 60px; height: 1px;
+  background: var(--agency-accent); opacity: 0.4;
+}
+.agency-hero-headline {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: white; margin-bottom: 20px;
+}
+.agency-hero-headline em { font-style: italic; color: var(--agency-accent); }
+.agency-hero-sub {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.5);
+  max-width: 400px;
+  line-height: 1.75;
+  margin-bottom: 44px;
+}
+.agency-benefits {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.agency-benefit {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  transition: all var(--transition);
+}
+.agency-benefit:hover { background: rgba(255,255,255,0.07); border-color: rgba(245,158,11,0.2); }
+.agency-benefit-icon { font-size: 1.4rem; margin-bottom: 8px; }
+.agency-benefit-title { font-weight: 700; font-size: 0.85rem; color: white; margin-bottom: 3px; }
+.agency-benefit-sub { font-size: 0.75rem; color: rgba(255,255,255,0.45); line-height: 1.5; }
+.agency-hero-footer {
+  position: relative; z-index: 1;
+}
+.agency-partners {
+  display: flex; align-items: center; gap: 16px;
+  flex-wrap: wrap;
+}
+.agency-partner-label {
+  font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+.agency-partner-chip {
+  padding: 5px 12px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 100px;
+  font-size: 0.75rem; font-weight: 600;
+  color: rgba(255,255,255,0.5);
+}
+.agency-stats-row {
+  display: flex; gap: 28px; margin-bottom: 24px;
+}
+.agency-stat-val {
+  font-family: var(--font-display);
+  font-size: 1.5rem; color: white; letter-spacing: -0.02em;
+}
+.agency-stat-label { font-size: 0.72rem; color: rgba(255,255,255,0.35); margin-top: 1px; }
+
+/* ── RIGHT PANEL — AUTH FORM ── */
+.agency-auth-right {
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 48px 44px;
+  border-left: 1px solid var(--border);
+  position: relative;
+  overflow-y: auto;
+}
+.agency-auth-right::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--agency-accent), #fbbf24, var(--teal));
+}
+.agency-auth-inner {
+  max-width: 380px;
+  width: 100%;
+  margin: 0 auto;
+}
+.agency-auth-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 6px 14px;
+  background: var(--agency-accent-light);
+  border: 1px solid #fde68a;
+  border-radius: 100px;
+  font-size: 0.75rem; font-weight: 700;
+  color: #92400e;
+  margin-bottom: 20px;
+  letter-spacing: 0.02em;
+}
+.agency-auth-title {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+.agency-auth-sub { font-size: 0.88rem; color: var(--muted); margin-bottom: 32px; line-height: 1.6; }
+
+/* Tabs */
+.auth-tabs {
+  display: flex;
+  background: var(--cream);
+  border-radius: var(--radius-sm);
+  padding: 4px;
+  margin-bottom: 28px;
+}
+.auth-tab {
+  flex: 1; padding: 8px;
+  text-align: center;
+  font-size: 0.85rem; font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all var(--transition);
+  color: var(--muted);
+  border: none; background: none;
+  font-family: var(--font-body);
+}
+.auth-tab.active {
+  background: var(--white);
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Form elements */
+.form-group { margin-bottom: 16px; }
+.form-label {
+  display: block;
+  font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 6px;
+}
+.input-wrap { position: relative; }
+.input-icon {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  font-size: 1rem; color: var(--muted); pointer-events: none;
+  transition: color var(--transition);
+}
+.form-input {
+  width: 100%;
+  padding: 12px 14px 12px 42px;
+  background: var(--cream);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.9rem; color: var(--ink);
+  transition: all var(--transition); outline: none;
+}
+.form-input:focus {
+  border-color: var(--agency-accent);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(245,158,11,0.12);
+}
+.form-input.error { border-color: var(--red); }
+.form-input-plain {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--cream);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.9rem; color: var(--ink);
+  transition: all var(--transition); outline: none;
+}
+.form-input-plain:focus {
+  border-color: var(--agency-accent);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(245,158,11,0.12);
+}
+.form-select-plain {
+  width: 100%;
+  padding: 12px 36px 12px 14px;
+  background: var(--cream);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.9rem; color: var(--ink);
+  outline: none; cursor: pointer;
+  transition: all var(--transition);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6660' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+.form-select-plain:focus { border-color: var(--agency-accent); background-color: var(--white); box-shadow: 0 0 0 3px rgba(245,158,11,0.12); }
+.form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 0; }
+.field-error {
+  font-size: 0.75rem; color: var(--red);
+  margin-top: 4px; display: none;
+}
+.field-error.show { display: block; }
+.input-eye {
+  position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+  font-size: 0.95rem; color: var(--muted); cursor: pointer;
+  transition: color var(--transition); user-select: none;
+}
+.input-eye:hover { color: var(--agency-accent); }
+.form-input.has-eye { padding-right: 42px; }
+
+/* Agency submit button — amber themed */
+.agency-btn {
+  width: 100%;
+  background: var(--agency-accent);
+  color: white;
+  border: none;
+  border-radius: 100px;
+  padding: 16px;
+  font-family: var(--font-body);
+  font-size: 0.95rem; font-weight: 700;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  transition: all var(--transition);
+  margin-top: 8px;
+  position: relative; overflow: hidden;
+}
+.agency-btn::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(255,255,255,0.15);
+  transform: translateX(-100%);
+  transition: transform 0.4s ease;
+}
+.agency-btn:hover::after { transform: translateX(0); }
+.agency-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(245,158,11,0.35); background: #e08c00; }
+.agency-btn:active { transform: scale(0.98); }
+.agency-btn:disabled { opacity: 0.65; cursor: not-allowed; transform: none; }
+
+/* Divider */
+.auth-divider {
+  text-align: center;
+  font-size: 0.8rem; color: var(--muted);
+  margin: 20px 0; position: relative;
+}
+.auth-divider::before, .auth-divider::after {
+  content: '';
+  position: absolute; top: 50%;
+  width: 40%; height: 1px; background: var(--border);
+}
+.auth-divider::before { left: 0; }
+.auth-divider::after { right: 0; }
+
+/* Demo button */
+.demo-btn {
+  width: 100%; padding: 11px;
+  background: var(--cream);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.82rem; font-weight: 600;
+  cursor: pointer; color: var(--ink);
+  transition: all var(--transition); text-align: center;
+}
+.demo-btn:hover { border-color: var(--agency-accent); color: var(--agency-accent); background: var(--agency-accent-light); }
+
+/* Registration step pills */
+.reg-steps {
+  display: flex; align-items: center; gap: 0;
+  margin-bottom: 28px; overflow: hidden;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+.reg-step {
+  flex: 1; padding: 9px 6px;
+  text-align: center;
+  font-size: 0.72rem; font-weight: 700;
+  color: var(--muted); background: var(--cream);
+  border-right: 1px solid var(--border);
+  transition: all var(--transition);
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+}
+.reg-step:last-child { border-right: none; }
+.reg-step.active { background: var(--agency-dark); color: white; }
+.reg-step.done { background: var(--agency-accent); color: white; }
+.reg-step-num {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; font-weight: 800; flex-shrink: 0;
+}
+
+/* Business type radio cards */
+.biz-type-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px; margin-bottom: 18px;
+}
+.biz-type-card {
+  padding: 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer; transition: all var(--transition);
+  background: var(--cream);
+  text-align: center;
+}
+.biz-type-card:hover { border-color: var(--agency-accent); background: var(--agency-accent-light); }
+.biz-type-card.selected { border-color: var(--agency-accent); background: var(--agency-accent-light); }
+.biz-type-icon { font-size: 1.6rem; margin-bottom: 6px; }
+.biz-type-label { font-size: 0.8rem; font-weight: 700; color: var(--ink); }
+.biz-type-sub { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+
+/* Document upload area */
+.doc-upload {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: 24px;
+  text-align: center; cursor: pointer;
+  transition: all var(--transition); background: var(--cream);
+}
+.doc-upload:hover { border-color: var(--agency-accent); background: var(--agency-accent-light); }
+.doc-upload-icon { font-size: 2rem; margin-bottom: 8px; }
+.doc-upload-text { font-size: 0.85rem; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
+.doc-upload-sub { font-size: 0.75rem; color: var(--muted); }
+
+/* Checkbox */
+.checkbox-row {
+  display: flex; align-items: flex-start; gap: 10px; margin-bottom: 16px;
+}
+.checkbox-custom {
+  width: 18px; height: 18px;
+  border: 1.5px solid var(--border);
+  border-radius: 4px; background: var(--cream);
+  cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition); margin-top: 2px;
+}
+.checkbox-custom.checked { background: var(--agency-accent); border-color: var(--agency-accent); }
+.checkbox-custom.checked::after { content: '✓'; font-size: 0.75rem; color: white; font-weight: 700; }
+.checkbox-label { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+.checkbox-label a { color: var(--agency-accent); font-weight: 600; text-decoration: none; }
+
+/* Forgot password overlay */
+.fp-overlay {
+  position: fixed; inset: 0; z-index: 999;
+  background: rgba(13,13,13,0.5);
+  backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity var(--transition); padding: 20px;
+}
+.fp-overlay.active { opacity: 1; pointer-events: all; }
+.fp-card {
+  background: var(--white); border-radius: var(--radius-lg);
+  padding: 36px 32px; max-width: 400px; width: 100%;
+  box-shadow: var(--shadow-lg);
+  transform: scale(0.95) translateY(16px);
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); position: relative;
+}
+.fp-overlay.active .fp-card { transform: scale(1) translateY(0); }
+.fp-title { font-family: var(--font-display); font-size: 1.4rem; margin-bottom: 8px; }
+.fp-sub { font-size: 0.85rem; color: var(--muted); margin-bottom: 24px; line-height: 1.6; }
+.fp-close {
+  position: absolute; top: 16px; right: 16px;
+  width: 32px; height: 32px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--cream);
+  cursor: pointer; font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition);
+}
+.fp-close:hover { background: var(--red-light); border-color: var(--red); color: var(--red); }
+
+/* Approval pending screen */
+.approval-screen {
+  text-align: center; padding: 40px 0;
+}
+.approval-icon { font-size: 4rem; margin-bottom: 20px; }
+.approval-title { font-family: var(--font-display); font-size: 1.6rem; margin-bottom: 10px; letter-spacing: -0.02em; }
+.approval-sub { font-size: 0.9rem; color: var(--muted); line-height: 1.7; max-width: 320px; margin: 0 auto 24px; }
+.approval-steps { text-align: left; margin: 0 auto 28px; max-width: 280px; }
+.approval-step {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+.approval-step:last-child { border-bottom: none; }
+.approval-step-icon {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; flex-shrink: 0;
+}
+.approval-step-icon.done { background: var(--green-light); color: var(--green); }
+.approval-step-icon.pending { background: var(--amber-light); color: var(--amber); }
+.approval-step-icon.wait { background: var(--cream); color: var(--muted); }
+
+/* Footer */
+.auth-footer {
+  text-align: center; font-size: 0.78rem; color: var(--muted);
+  margin-top: 24px; line-height: 1.6;
+}
+.auth-footer a { color: var(--agency-accent); text-decoration: none; font-weight: 600; }
+
+/* Spinner */
+.spinner {
+  width: 18px; height: 18px;
+  border: 2.5px solid rgba(255,255,255,0.3);
+  border-top-color: white; border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Toast */
+#toast-container {
+  position: fixed; bottom: 32px; right: 32px;
+  z-index: 9999; display: flex; flex-direction: column; gap: 10px;
+  pointer-events: none;
+}
+.toast {
+  background: var(--ink); color: var(--paper);
+  border-radius: var(--radius-md); padding: 14px 20px;
+  font-size: 0.875rem; font-weight: 500;
+  box-shadow: var(--shadow-lg);
+  display: flex; align-items: center; gap: 12px;
+  transform: translateX(120%);
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  pointer-events: all; min-width: 280px; max-width: 380px;
+}
+.toast.show { transform: translateX(0); }
+.toast.success { background: var(--teal); }
+.toast.warning { background: var(--amber); }
+.toast.error { background: var(--red); }
+.toast-icon { font-size: 1.1rem; flex-shrink: 0; }
+.toast-msg { flex: 1; }
+
+/* Responsive */
+@media (max-width: 960px) {
+  .agency-auth-page { grid-template-columns: 1fr; }
+  .agency-hero { display: none; }
+  .agency-auth-right { min-height: 100vh; border-left: none; }
+}
+@media (max-width: 480px) {
+  .agency-auth-right { padding: 40px 20px; }
+  .form-row-2 { grid-template-columns: 1fr; }
+  .biz-type-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="agency-auth-page">
+
+  <!-- ══════════ LEFT HERO ══════════ -->
+  <div class="agency-hero">
+    <div class="agency-grid-lines"></div>
+
+    <div class="agency-hero-logo">
+      <div class="agency-logo-mark">🏢</div>
+      <div class="agency-logo-texts">
+        <div class="agency-logo-name">PLANETRIP</div>
+        <span class="agency-logo-sub">Agency Partner Portal</span>
+      </div>
+    </div>
+
+    <div class="agency-hero-body">
+      <div class="agency-hero-eyebrow">✦ Grow Your Travel Business</div>
+      <h1 class="agency-hero-headline">
+        The smartest platform<br>for <em>travel agencies.</em>
+      </h1>
+      <p class="agency-hero-sub">
+        List packages, manage bookings, track commissions and reach lakhs of eager travellers — all from one powerful dashboard.
+      </p>
+
+      <div class="agency-benefits">
+        <div class="agency-benefit">
+          <div class="agency-benefit-icon">📦</div>
+          <div class="agency-benefit-title">Package Management</div>
+          <div class="agency-benefit-sub">Create, publish and manage tour packages with full itinerary builder</div>
+        </div>
+        <div class="agency-benefit">
+          <div class="agency-benefit-icon">💰</div>
+          <div class="agency-benefit-title">Commission Tracking</div>
+          <div class="agency-benefit-sub">Real-time earnings dashboard, payout history, and invoicing</div>
+        </div>
+        <div class="agency-benefit">
+          <div class="agency-benefit-icon">👥</div>
+          <div class="agency-benefit-title">Client Management</div>
+          <div class="agency-benefit-sub">Full CRM with booking history, preferences and communication logs</div>
+        </div>
+        <div class="agency-benefit">
+          <div class="agency-benefit-icon">📊</div>
+          <div class="agency-benefit-title">Analytics & Reports</div>
+          <div class="agency-benefit-sub">Booking trends, revenue analytics, and performance benchmarks</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="agency-hero-footer">
+      <div class="agency-stats-row">
+        <div>
+          <div class="agency-stat-val">1,200+</div>
+          <div class="agency-stat-label">Partner Agencies</div>
+        </div>
+        <div>
+          <div class="agency-stat-val">₹18Cr+</div>
+          <div class="agency-stat-label">Commission Paid Out</div>
+        </div>
+        <div>
+          <div class="agency-stat-val">4.8★</div>
+          <div class="agency-stat-label">Agency Rating</div>
+        </div>
+      </div>
+      <div class="agency-partners">
+        <span class="agency-partner-label">Trusted by</span>
+        <span class="agency-partner-chip">Cox & Kings</span>
+        <span class="agency-partner-chip">MakeMyTrip</span>
+        <span class="agency-partner-chip">Thomas Cook</span>
+        <span class="agency-partner-chip">Kesari Tours</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ RIGHT AUTH FORM ══════════ -->
+  <div class="agency-auth-right">
+    <div class="agency-auth-inner">
+
+      <div class="agency-auth-badge">🏢 Agency Partner Portal</div>
+      <h1 class="agency-auth-title" id="agency-auth-title">Welcome back,<br>partner.</h1>
+      <p class="agency-auth-sub" id="agency-auth-sub">Sign in to your agency dashboard to manage packages, bookings and clients.</p>
+
+      <!-- TABS -->
+      <div class="auth-tabs" id="agency-tabs">
+        <button class="auth-tab active" onclick="switchAgencyTab('login')">Sign In</button>
+        <button class="auth-tab" onclick="switchAgencyTab('register')">Register Agency</button>
+      </div>
+
+      <!-- ════ LOGIN FORM ════ -->
+      <div id="agency-login-form">
+        <div class="form-group">
+          <label class="form-label">Agency Email / Username</label>
+          <div class="input-wrap">
+            <span class="input-icon">📧</span>
+            <input type="email" class="form-input" id="ag-login-email" placeholder="agency@example.com"
+                   onkeydown="if(event.key==='Enter') handleAgencyLogin()">
+          </div>
+          <span class="field-error" id="err-ag-login-email">Enter a valid email address</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input type="password" class="form-input has-eye" id="ag-login-pass" placeholder="••••••••"
+                   onkeydown="if(event.key==='Enter') handleAgencyLogin()">
+            <span class="input-eye" onclick="togglePwVis('ag-login-pass', this)">👁️</span>
+          </div>
+          <span class="field-error" id="err-ag-login-pass">Password is required</span>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <label style="display:flex;align-items:center;gap:8px;font-size:0.82rem;color:var(--muted);cursor:pointer">
+            <div class="checkbox-custom" id="remember-check" onclick="toggleCb(this)" style="margin-top:0"></div>
+            Remember me for 30 days
+          </label>
+          <a style="font-size:0.78rem;color:var(--agency-accent);font-weight:600;cursor:pointer;text-decoration:none" onclick="openFP()">Forgot password?</a>
+        </div>
+
+        <button class="agency-btn" onclick="handleAgencyLogin()">
+          <span id="ag-login-btn-text">Sign In to Agency Portal →</span>
+          <span class="spinner" id="ag-login-spinner" style="display:none"></span>
+        </button>
+
+        <div class="auth-divider">or use demo account</div>
+        <button class="demo-btn" onclick="demoAgencyLogin()">🏢 Login as Demo Agency</button>
+
+        <div style="margin-top:18px;padding:14px;background:var(--amber-light);border:1px solid #fde68a;border-radius:var(--radius-sm)">
+          <div style="font-size:0.78rem;font-weight:700;color:#92400e;margin-bottom:4px">⚡ Agency Credentials Note</div>
+          <div style="font-size:0.75rem;color:#b45309;line-height:1.6">
+            Use your registered agency email and the password set during onboarding. Contact <strong>agency@planetrip.in</strong> if you face login issues.
+          </div>
+        </div>
+      </div>
+
+      <!-- ════ REGISTER FORM (Multi-step) ════ -->
+      <div id="agency-register-form" style="display:none">
+        <div class="reg-steps" id="reg-steps">
+          <div class="reg-step active" id="reg-step-pill-1">
+            <div class="reg-step-num">1</div> Business
+          </div>
+          <div class="reg-step" id="reg-step-pill-2">
+            <div class="reg-step-num">2</div> Contact
+          </div>
+          <div class="reg-step" id="reg-step-pill-3">
+            <div class="reg-step-num">3</div> Documents
+          </div>
+          <div class="reg-step" id="reg-step-pill-4">
+            <div class="reg-step-num">4</div> Account
+          </div>
+        </div>
+
+        <!-- REG STEP 1: Business Info -->
+        <div id="reg-s1">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px">Business Type</div>
+          <div class="biz-type-grid" id="biz-type-grid">
+            <div class="biz-type-card selected" onclick="selectBizType(this, 'tour-operator')">
+              <div class="biz-type-icon">🗺️</div>
+              <div class="biz-type-label">Tour Operator</div>
+              <div class="biz-type-sub">Packages & guided tours</div>
+            </div>
+            <div class="biz-type-card" onclick="selectBizType(this, 'travel-agency')">
+              <div class="biz-type-icon">✈️</div>
+              <div class="biz-type-label">Travel Agency</div>
+              <div class="biz-type-sub">Flight & hotel bookings</div>
+            </div>
+            <div class="biz-type-card" onclick="selectBizType(this, 'dmc')">
+              <div class="biz-type-icon">🏙️</div>
+              <div class="biz-type-label">DMC</div>
+              <div class="biz-type-sub">Destination Management</div>
+            </div>
+            <div class="biz-type-card" onclick="selectBizType(this, 'homestay')">
+              <div class="biz-type-icon">🏡</div>
+              <div class="biz-type-label">Homestay / Hotel</div>
+              <div class="biz-type-sub">Accommodation provider</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Agency / Business Name</label>
+            <input type="text" class="form-input-plain" id="reg-biz-name" placeholder="e.g. Himalayan Adventures Pvt. Ltd.">
+            <span class="field-error" id="err-reg-biz-name">Agency name is required</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Years in Business</label>
+            <select class="form-select-plain" id="reg-biz-years">
+              <option value="">Select…</option>
+              <option>Less than 1 year</option>
+              <option>1–3 years</option>
+              <option>3–5 years</option>
+              <option>5–10 years</option>
+              <option>10+ years</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Primary Operating Region</label>
+            <select class="form-select-plain" id="reg-region">
+              <option value="">Select region…</option>
+              <option>North India (Delhi, Himachal, J&K)</option>
+              <option>South India (Kerala, Karnataka, Tamil Nadu)</option>
+              <option>West India (Goa, Rajasthan, Gujarat)</option>
+              <option>East India (West Bengal, Sikkim, Odisha)</option>
+              <option>Northeast India (7 Sisters)</option>
+              <option>Pan India</option>
+              <option>International</option>
+            </select>
+          </div>
+          <button class="agency-btn" onclick="goRegStep(2)">Continue →</button>
+        </div>
+
+        <!-- REG STEP 2: Contact Details -->
+        <div id="reg-s2" style="display:none">
+          <div class="form-row-2" style="margin-bottom:14px">
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">Contact Person Name</label>
+              <input type="text" class="form-input-plain" id="reg-contact-name" placeholder="Full name">
+              <span class="field-error" id="err-reg-contact-name">Name is required</span>
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label class="form-label">Designation</label>
+              <input type="text" class="form-input-plain" id="reg-designation" placeholder="e.g. Director">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Business Email</label>
+            <div class="input-wrap">
+              <span class="input-icon">📧</span>
+              <input type="email" class="form-input" id="reg-email" placeholder="contact@agency.com">
+            </div>
+            <span class="field-error" id="err-reg-email">Enter a valid email</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Business Phone</label>
+            <div class="input-wrap">
+              <span class="input-icon">📞</span>
+              <input type="tel" class="form-input" id="reg-phone" placeholder="+91 98765 43210">
+            </div>
+            <span class="field-error" id="err-reg-phone">Phone number is required</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Office Address</label>
+            <input type="text" class="form-input-plain" id="reg-address" placeholder="Street, City, PIN">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Business Website (optional)</label>
+            <input type="url" class="form-input-plain" id="reg-website" placeholder="https://youragency.com">
+          </div>
+          <div style="display:flex;gap:10px">
+            <button class="agency-btn" style="background:var(--cream);color:var(--ink);border:1.5px solid var(--border);flex:0 0 auto;width:auto;padding:14px 18px" onclick="goRegStep(1)">← Back</button>
+            <button class="agency-btn" onclick="goRegStep2()">Continue →</button>
+          </div>
+        </div>
+
+        <!-- REG STEP 3: Documents / Licences -->
+        <div id="reg-s3" style="display:none">
+          <p style="font-size:0.83rem;color:var(--muted);line-height:1.6;margin-bottom:18px">Please provide your business registration details. Documents are verified within 24–48 hours.</p>
+          <div class="form-group">
+            <label class="form-label">GSTIN (GST Registration Number)</label>
+            <input type="text" class="form-input-plain" id="reg-gst" placeholder="e.g. 27AAAPL1234C1ZV" style="text-transform:uppercase">
+            <span class="field-error" id="err-reg-gst">Enter a valid 15-character GSTIN</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Ministry of Tourism (MOT) Licence No. <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+            <input type="text" class="form-input-plain" id="reg-mot" placeholder="e.g. MOT/2024/XXXXX">
+          </div>
+          <div class="form-group">
+            <label class="form-label">PAN Number</label>
+            <input type="text" class="form-input-plain" id="reg-pan" placeholder="e.g. AAAPL1234C" style="text-transform:uppercase">
+            <span class="field-error" id="err-reg-pan">Enter a valid 10-character PAN</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Upload Business Registration Document</label>
+            <div class="doc-upload" onclick="fakeUpload('reg-doc-1', this)">
+              <div class="doc-upload-icon">📄</div>
+              <div class="doc-upload-text" id="reg-doc-1-text">Click to upload or drag & drop</div>
+              <div class="doc-upload-sub">PDF, JPG or PNG — max 5MB</div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px">
+            <button class="agency-btn" style="background:var(--cream);color:var(--ink);border:1.5px solid var(--border);flex:0 0 auto;width:auto;padding:14px 18px" onclick="goRegStep(2)">← Back</button>
+            <button class="agency-btn" onclick="goRegStep3()">Continue →</button>
+          </div>
+        </div>
+
+        <!-- REG STEP 4: Create Account -->
+        <div id="reg-s4" style="display:none">
+          <div class="form-group">
+            <label class="form-label">Login Email</label>
+            <div class="input-wrap">
+              <span class="input-icon">📧</span>
+              <input type="email" class="form-input" id="reg-login-email" placeholder="your@agencyemail.com">
+            </div>
+            <span class="field-error" id="err-reg-login-email">Enter a valid email</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Create Password</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔒</span>
+              <input type="password" class="form-input has-eye" id="reg-pass" placeholder="Min 8 characters"
+                     onkeydown="if(event.key==='Enter') handleRegFinal()">
+              <span class="input-eye" onclick="togglePwVis('reg-pass', this)">👁️</span>
+            </div>
+            <span class="field-error" id="err-reg-pass">Min 8 characters required</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirm Password</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔒</span>
+              <input type="password" class="form-input has-eye" id="reg-confirm" placeholder="Re-enter password"
+                     onkeydown="if(event.key==='Enter') handleRegFinal()">
+              <span class="input-eye" onclick="togglePwVis('reg-confirm', this)">👁️</span>
+            </div>
+            <span class="field-error" id="err-reg-confirm">Passwords do not match</span>
+          </div>
+          <div class="checkbox-row">
+            <div class="checkbox-custom" id="ag-terms-check" onclick="toggleCb(this)"></div>
+            <span class="checkbox-label">I agree to PLANETRIP's <a href="#" onclick="return false">Agency Partner Agreement</a>, <a href="#" onclick="return false">Terms of Service</a>, and <a href="#" onclick="return false">Privacy Policy</a></span>
+          </div>
+          <span class="field-error" id="err-ag-terms" style="margin-top:-10px;margin-bottom:10px">Please accept the agreement</span>
+
+          <div style="display:flex;gap:10px">
+            <button class="agency-btn" style="background:var(--cream);color:var(--ink);border:1.5px solid var(--border);flex:0 0 auto;width:auto;padding:14px 18px" onclick="goRegStep(3)">← Back</button>
+            <button class="agency-btn" onclick="handleRegFinal()">
+              <span id="reg-final-btn-text">Submit Application 🎉</span>
+              <span class="spinner" id="reg-final-spinner" style="display:none"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- APPROVAL PENDING -->
+        <div id="reg-approval" style="display:none">
+          <div class="approval-screen">
+            <div class="approval-icon">⏳</div>
+            <div class="approval-title">Application Submitted!</div>
+            <p class="approval-sub">Your agency registration is under review. Here's what happens next:</p>
+            <div class="approval-steps">
+              <div class="approval-step">
+                <div class="approval-step-icon done">✓</div>
+                Application Received
+              </div>
+              <div class="approval-step">
+                <div class="approval-step-icon pending">⏳</div>
+                Document Verification (24–48 hrs)
+              </div>
+              <div class="approval-step">
+                <div class="approval-step-icon wait">○</div>
+                Account Activation Email
+              </div>
+              <div class="approval-step">
+                <div class="approval-step-icon wait">○</div>
+                Access Agency Dashboard
+              </div>
+            </div>
+            <button class="agency-btn" onclick="switchAgencyTab('login')">Back to Sign In</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="auth-footer">
+        Not an agency? <a href="planetrip_user_auth.html">Sign in as Traveller →</a><br>
+        <span style="margin-top:6px;display:inline-block">© 2025 PLANETRIP Agency Portal</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Forgot Password Overlay -->
+<div class="fp-overlay" id="fp-overlay">
+  <div class="fp-card">
+    <button class="fp-close" onclick="closeFP()">✕</button>
+    <div class="fp-title">🔑 Reset Agency Password</div>
+    <p class="fp-sub">Enter your registered agency email. We'll send you a secure reset link within 5 minutes.</p>
+    <div id="fp-s1">
+      <div class="form-group">
+        <label class="form-label">Agency Email</label>
+        <div class="input-wrap">
+          <span class="input-icon">📧</span>
+          <input type="email" class="form-input" id="fp-email" placeholder="agency@example.com"
+                 onkeydown="if(event.key==='Enter') sendFPLink()">
+        </div>
+        <span class="field-error" id="err-fp-email">Enter a valid email address</span>
+      </div>
+      <button class="agency-btn" onclick="sendFPLink()">
+        <span id="fp-btn-text">Send Reset Link →</span>
+        <span class="spinner" id="fp-spinner" style="display:none"></span>
+      </button>
+    </div>
+    <div id="fp-s2" style="display:none;text-align:center;padding:20px 0">
+      <div style="font-size:3rem;margin-bottom:16px">📬</div>
+      <div style="font-family:var(--font-display);font-size:1.2rem;margin-bottom:8px">Reset link sent!</div>
+      <p style="font-size:0.85rem;color:var(--muted);line-height:1.6">Check <strong id="fp-email-show"></strong>. The link expires in 30 minutes.</p>
+      <button class="agency-btn" style="margin-top:24px" onclick="closeFP()">Back to Sign In</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script>
+// ── STATE ──
+let currentRegStep = 1;
+let selectedBizType = 'tour-operator';
+let agTermsAccepted = false;
+let rememberMe = false;
+
+// ── TABS ──
+function switchAgencyTab(tab) {
+  const tabs = document.querySelectorAll('.auth-tab');
+  tabs[0].classList.toggle('active', tab === 'login');
+  tabs[1].classList.toggle('active', tab === 'register');
+  document.getElementById('agency-login-form').style.display = tab === 'login' ? '' : 'none';
+  document.getElementById('agency-register-form').style.display = tab === 'register' ? '' : 'none';
+  if (tab === 'login') {
+    document.getElementById('agency-auth-title').innerHTML = 'Welcome back,<br>partner.';
+    document.getElementById('agency-auth-sub').textContent = 'Sign in to your agency dashboard to manage packages, bookings and clients.';
+  } else {
+    document.getElementById('agency-auth-title').innerHTML = 'Register your<br><em style="font-style:italic;color:var(--agency-accent)">agency.</em>';
+    document.getElementById('agency-auth-sub').textContent = 'Join 1,200+ agencies already growing with PLANETRIP. Free to join.';
+    goRegStep(1);
+  }
+}
+
+// ── PASSWORD VISIBILITY ──
+function togglePwVis(id, eye) {
+  const el = document.getElementById(id);
+  el.type = el.type === 'password' ? 'text' : 'password';
+  eye.textContent = el.type === 'password' ? '👁️' : '🙈';
+}
+
+// ── CHECKBOX ──
+function toggleCb(el) {
+  if (el.id === 'ag-terms-check') {
+    agTermsAccepted = !agTermsAccepted;
+    el.classList.toggle('checked', agTermsAccepted);
+  } else if (el.id === 'remember-check') {
+    rememberMe = !rememberMe;
+    el.classList.toggle('checked', rememberMe);
+  }
+}
+
+// ── VALIDATION ──
+function validateEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+function showErr(id, inputId) {
+  document.getElementById(id).classList.add('show');
+  if (inputId) document.getElementById(inputId)?.classList.add('error');
+}
+function clearErr(id, inputId) {
+  document.getElementById(id).classList.remove('show');
+  if (inputId) document.getElementById(inputId)?.classList.remove('error');
+}
+
+// ── LOGIN ──
+function handleAgencyLogin() {
+  const email = document.getElementById('ag-login-email').value.trim();
+  const pass = document.getElementById('ag-login-pass').value;
+  let ok = true;
+  if (!validateEmail(email)) { showErr('err-ag-login-email','ag-login-email'); ok = false; } else clearErr('err-ag-login-email','ag-login-email');
+  if (!pass) { showErr('err-ag-login-pass','ag-login-pass'); ok = false; } else clearErr('err-ag-login-pass','ag-login-pass');
+  if (!ok) return;
+  setLoad('ag-login-btn-text','ag-login-spinner', true);
+  setTimeout(() => {
+    setLoad('ag-login-btn-text','ag-login-spinner', false);
+    showToast('Welcome back! Redirecting to Agency Dashboard… 🏢', 'success');
+    setTimeout(() => { window.location.href = 'planetrip_agency_dashboard.html'; }, 1200);
+  }, 1500);
+}
+
+function demoAgencyLogin() {
+  setLoad('ag-login-btn-text','ag-login-spinner', true);
+  setTimeout(() => {
+    setLoad('ag-login-btn-text','ag-login-spinner', false);
+    showToast('Logging in as Demo Agency… 🏢', 'success');
+    setTimeout(() => { window.location.href = 'planetrip_agency_dashboard.html'; }, 1000);
+  }, 900);
+}
+
+// ── REGISTER STEPS ──
+function goRegStep(step) {
+  currentRegStep = step;
+  [1,2,3,4].forEach(s => {
+    const el = document.getElementById(`reg-s${s}`);
+    if (el) el.style.display = s === step ? '' : 'none';
+    const pill = document.getElementById(`reg-step-pill-${s}`);
+    if (pill) {
+      pill.className = 'reg-step';
+      if (s < step) pill.classList.add('done');
+      else if (s === step) pill.classList.add('active');
+    }
+  });
+}
+
+function selectBizType(card, type) {
+  selectedBizType = type;
+  document.querySelectorAll('.biz-type-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+}
+
+function goRegStep2() {
+  const name = document.getElementById('reg-biz-name').value.trim();
+  if (!name) { showErr('err-reg-biz-name','reg-biz-name'); return; }
+  clearErr('err-reg-biz-name','reg-biz-name');
+  goRegStep(2);
+}
+
+function goRegStep3() {
+  const contactName = document.getElementById('reg-contact-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const phone = document.getElementById('reg-phone').value.trim();
+  let ok = true;
+  if (!contactName) { showErr('err-reg-contact-name','reg-contact-name'); ok = false; } else clearErr('err-reg-contact-name','reg-contact-name');
+  if (!validateEmail(email)) { showErr('err-reg-email','reg-email'); ok = false; } else clearErr('err-reg-email','reg-email');
+  if (!phone) { showErr('err-reg-phone','reg-phone'); ok = false; } else clearErr('err-reg-phone','reg-phone');
+  if (ok) goRegStep(3);
+}
+
+function handleRegFinal() {
+  const email = document.getElementById('reg-login-email').value.trim();
+  const pass = document.getElementById('reg-pass').value;
+  const confirm = document.getElementById('reg-confirm').value;
+  let ok = true;
+  if (!validateEmail(email)) { showErr('err-reg-login-email','reg-login-email'); ok = false; } else clearErr('err-reg-login-email','reg-login-email');
+  if (pass.length < 8) { showErr('err-reg-pass','reg-pass'); ok = false; } else clearErr('err-reg-pass','reg-pass');
+  if (pass !== confirm) { showErr('err-reg-confirm','reg-confirm'); ok = false; } else clearErr('err-reg-confirm','reg-confirm');
+  if (!agTermsAccepted) { document.getElementById('err-ag-terms').style.display = 'block'; ok = false; } else document.getElementById('err-ag-terms').style.display = 'none';
+  if (!ok) return;
+  setLoad('reg-final-btn-text','reg-final-spinner', true);
+  setTimeout(() => {
+    setLoad('reg-final-btn-text','reg-final-spinner', false);
+    // Show the 4 step pills as all done, then show approval
+    [1,2,3,4].forEach(s => {
+      const pill = document.getElementById(`reg-step-pill-${s}`);
+      if (pill) pill.className = 'reg-step done';
+    });
+    document.getElementById('reg-s4').style.display = 'none';
+    document.getElementById('reg-approval').style.display = '';
+    showToast('Application submitted! We\'ll review within 24–48 hrs. 🎉', 'success');
+  }, 1800);
+}
+
+// ── DOCUMENT UPLOAD (FAKE) ──
+function fakeUpload(id, el) {
+  const textEl = document.getElementById(`${id}-text`);
+  if (textEl) {
+    textEl.textContent = '✅ Document uploaded successfully';
+    el.style.borderColor = 'var(--green)';
+    el.style.background = 'var(--green-light)';
+  }
+  showToast('Document uploaded! ✅', 'success');
+}
+
+// ── FORGOT PASSWORD ──
+function openFP() { document.getElementById('fp-overlay').classList.add('active'); }
+function closeFP() { document.getElementById('fp-overlay').classList.remove('active'); }
+function sendFPLink() {
+  const email = document.getElementById('fp-email').value.trim();
+  if (!validateEmail(email)) { showErr('err-fp-email','fp-email'); return; }
+  clearErr('err-fp-email','fp-email');
+  document.getElementById('fp-btn-text').style.opacity = '0';
+  document.getElementById('fp-spinner').style.display = 'inline-block';
+  setTimeout(() => {
+    document.getElementById('fp-btn-text').style.opacity = '1';
+    document.getElementById('fp-spinner').style.display = 'none';
+    document.getElementById('fp-email-show').textContent = email;
+    document.getElementById('fp-s1').style.display = 'none';
+    document.getElementById('fp-s2').style.display = '';
+    showToast('Reset link sent! 📬', 'success');
+  }, 1400);
+}
+
+// ── HELPERS ──
+function setLoad(textId, spinnerId, on) {
+  const t = document.getElementById(textId);
+  const s = document.getElementById(spinnerId);
+  if (t) t.style.opacity = on ? '0' : '1';
+  if (s) s.style.display = on ? 'inline-block' : 'none';
+}
+
+function showToast(msg, type = '') {
+  const icons = { success:'✅', warning:'⚠️', error:'❌', '':'💬' };
+  const c = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = `toast ${type}`;
+  t.innerHTML = `<span class="toast-icon">${icons[type]||'💬'}</span><span class="toast-msg">${msg}</span>`;
+  c.appendChild(t);
+  requestAnimationFrame(()=>{ requestAnimationFrame(()=>t.classList.add('show')); });
+  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(), 400); }, 3800);
+}
+
+// Close overlays on backdrop/Escape
+document.getElementById('fp-overlay').addEventListener('click', e => { if (e.target.id === 'fp-overlay') closeFP(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeFP(); });
+</script>
+
+<script>
+/* ── PLANETRIP AUTH POLISH LAYER ── */
+(function() {
+  // Keyboard: Escape cancels and goes back
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      if (document.referrer && document.referrer.includes('planetrip')) {
+        history.back();
+      } else {
+        window.location.href = 'planetrip_index.html';
+      }
+    }
+  });
+  // Auto-focus first input
+  const firstInput = document.querySelector('input[type="text"], input[type="email"]');
+  if (firstInput) setTimeout(function() { firstInput.focus(); }, 400);
+})();
+</script>
+</body>
+</html>
